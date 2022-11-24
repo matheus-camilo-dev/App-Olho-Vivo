@@ -15,7 +15,7 @@ cd app
 ```
 ### 2. Rodar Aplicação
 ```cmd
-flutter run
+flutter run --no-sound-null-safety
 ```
 #### 2.1 Escolher "device" para a aplicação (Escolher Google Chrome, aplicação pode não funcionar corretamente em outro "device")
 

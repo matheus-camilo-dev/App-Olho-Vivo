@@ -2,6 +2,7 @@ import 'package:app/pages/home_page.dart';
 import 'package:app/services/rest_api.dart';
 import 'package:app/shared/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void logarApi() async {
     if (await restApi.login()) {
       print("Usuário Logado com Sucesso!");
+      restApi.getLines('6010');
     }
   }
 
@@ -47,6 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    return const HomePage();
   }
 }
