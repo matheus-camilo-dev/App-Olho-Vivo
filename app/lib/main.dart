@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void logarApi() async {
     if (await restApi.login()) {
       print("Usuário Logado com Sucesso!");
-      restApi.getLines('6010');
+      print(restApi.getLines('6010'));
     }
   }
 
