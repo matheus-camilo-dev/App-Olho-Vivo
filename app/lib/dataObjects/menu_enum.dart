@@ -1,4 +1,0 @@
-enum MenuNavigation { 
-   lines,
-   stops 
-}
