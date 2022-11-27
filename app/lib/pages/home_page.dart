@@ -1,6 +1,4 @@
-import 'package:app/dataObjects/menu_enum.dart';
-import 'package:app/models/bus_line.dart';
-import 'package:app/pages/bus_line_page.dart';
+import 'package:app/data_objects/menu_enum.dart';
 import 'package:app/services/rest_api.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +13,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final restApi = RestAPI();
+
+  @override
+  void initState(){
+    super.initState();
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
 
   void logarApi() async {
     if (await restApi.login()) {

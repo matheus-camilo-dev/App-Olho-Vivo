@@ -1,14 +1,10 @@
-import 'package:app/dataObjects/menu_enum.dart';
-import 'package:app/models/bus_line.dart';
-import 'package:app/pages/bus_line_page.dart';
-import 'package:app/pages/bus_stops_page.dart';
+import 'package:app/data_objects/menu_enum.dart';
+import 'package:app/pages/base_search_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class MenuItemNav extends StatefulWidget {
   final String menuItemName;
-  final MenuNavigation? route;
+  final MenuNavigation route;
 
   const MenuItemNav(this.route, {Key? key, this.menuItemName = ''})
       : super(key: key);
@@ -27,11 +23,7 @@ class _MenuItemNavState extends State<MenuItemNav> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context){
-              if(widget.route == MenuNavigation.lines){
-                return const BusLinePage();
-              }else{
-                return const BusStopsPage();
-              }
+              return BaseSearchPage(widget.route);
             }),
           );
         },
