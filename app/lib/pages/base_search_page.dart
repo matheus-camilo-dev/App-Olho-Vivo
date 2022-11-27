@@ -1,5 +1,6 @@
 import 'package:app/data_objects/menu_enum.dart';
 import 'package:app/services/rest_api.dart';
+import 'package:app/shared/utils/debbuger.dart';
 import 'package:flutter/material.dart';
 
 import '../shared/constants.dart';
@@ -25,13 +26,22 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
     } else {
       widget.appBarTitle = 'Buscar Paradas';
     }
-    print(widget.appBarTitle);
   }
 
   void logarApi() async {
     if (await restApi.login()) {
       print("Usuário Logado com Sucesso!");
     }
+  }
+
+  void pegarParadas() async{
+    var paradas = await restApi.getStops("Santo");
+    printBusStops(paradas);
+  }
+
+  void pegarLocalizacaoVeiculos() async {
+    var localizacaoVeiculos = await restApi.getBusPosition();
+    printBusPosition(localizacaoVeiculos, 10);
   }
 
   @override
@@ -41,7 +51,7 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
         backgroundColor: Colors.purple,
         title: Text(
           widget.appBarTitle,
-          style: TextStyle(fontSize: 25),
+          style: const TextStyle(fontSize: 25),
         ),
       ),
       body: SafeArea(
@@ -73,9 +83,7 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
               ),
               SizedBox(
                 child: TextButton(
-                  onPressed: () {
-                    print("oi");
-                  },
+                  onPressed: pegarLocalizacaoVeiculos,
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
@@ -92,7 +100,7 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               ListView.builder(
@@ -100,7 +108,7 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
                 itemCount: widget.data.length,
                 itemBuilder: (BuildContext ctxt, int index) {
                   return Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Card(
                       shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(50.0),
