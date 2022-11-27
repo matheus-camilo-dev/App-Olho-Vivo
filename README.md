@@ -35,7 +35,7 @@ flutter run --no-sound-null-safety
 &nbsp;
 ## Criadores
 - Matheus Camilo (matheus-camilo-dev) - Integração API Olho Vivo
-- Fábio Zanin
-- Yuri Martins
-- Alice
-- Guilherme Nunes
+- Fábio Zanin (IIIzaninIII)
+- Yuri Martins (yuriney)
+- Alice (AlineMendes01)
+- Guilherme Nunes (GuilhermeNZ)
