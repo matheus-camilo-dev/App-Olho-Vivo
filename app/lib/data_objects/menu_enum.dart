@@ -1,0 +1,4 @@
+enum MenuNavigation { 
+   lines,
+   stops 
+}
