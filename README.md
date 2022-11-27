@@ -9,6 +9,9 @@ Magna cillum minim ut proident exercitation laboris dolore incididunt aliqua min
 
 &nbsp;
 ## Como Rodar Aplicação via Linha de Comando
+
+**Para poder rodar a aplicação é necessário o uso de um emulador android ou rodar em um dispositivo físico! Então caso não possua, crie um e selecione este como device. Ou utilize o seu dispositivo (caso seja android) para rodar!**
+
 ### 1. Entrar na pasta a aplicação
 ```cmd
 cd app
@@ -17,8 +20,10 @@ cd app
 ```cmd
 flutter run --no-sound-null-safety
 ```
-#### 2.1 Escolher "device" para a aplicação (Escolher Google Chrome, aplicação pode não funcionar corretamente em outro "device")
 
+&nbsp;
+## Resolução de alguns problemas ao rodar
+- Apagar a pasta `android/.gradle`
 
 &nbsp;
 ## Linguagens/Framework Utilizadas
