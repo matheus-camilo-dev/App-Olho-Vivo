@@ -26,7 +26,8 @@ void printBusPosition(List<BusPosition> busPositions, int quantidade){
   }
 }
 
-void printBusLines(List<BusLine> busLines){
+void printBusLines(List<BusLine> busLines, int quantidade){
+  int i = 0;
   for (var line in busLines) {
     print('\n');
     print('[');
@@ -35,10 +36,13 @@ void printBusLines(List<BusLine> busLines){
     print('    Volta: ${line.volta}');
     print(']');
     print('\n');
+    if(quantidade <= i) break;
+    i++;
   }
 }
 
-void printBusStops(List<BusStop> busStops){
+void printBusStops(List<BusStop> busStops, int quantidade){
+  int i = 0;
   for (var stop in busStops) {
     print('\n');
     print('[');
@@ -47,6 +51,8 @@ void printBusStops(List<BusStop> busStops){
     print('    : ${stop.posicao}');
     print(']');
     print('\n');
+    if(quantidade <= i) break;
+    i++;
   }
 }
 
