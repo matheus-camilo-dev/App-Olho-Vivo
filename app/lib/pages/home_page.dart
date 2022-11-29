@@ -3,6 +3,7 @@ import 'package:app/services/rest_api.dart';
 import 'package:flutter/material.dart';
 
 import '../components/menuItem.dart';
+import '../shared/constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         child: Container(
             height: const BoxConstraints().maxHeight,
             width: const BoxConstraints().maxWidth,
-            color: Colors.purple,
+            color: primaryColor,
             child:  Column(
               children: [
                 const SizedBox(

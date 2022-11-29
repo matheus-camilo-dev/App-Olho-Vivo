@@ -7,71 +7,63 @@ import 'package:app/services/rest_api.dart';
 import 'package:app/shared/utils/debbuger.dart';
 import 'package:app/shared/utils/functions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 
 import '../shared/constants.dart';
 
 class BaseSearchPage extends StatefulWidget {
   final MenuNavigation menuNavigation;
-  String appBarTitle = 'Buscar';
-  List<BusStop> lstParadas = [];
-  List<BusLine> lstLinhas = [];
 
-  BaseSearchPage(this.menuNavigation, {Key? key}) : super(key: key);
+  const BaseSearchPage(this.menuNavigation, {Key? key}) : super(key: key);
 
   @override
   State<BaseSearchPage> createState() => _BaseSearchPageState();
 }
 
 class _BaseSearchPageState extends State<BaseSearchPage> {
+  String appBarTitle = 'Buscar';
+  List<BusStop> lstParadas = [];
+  List<BusLine> lstLinhas = [];
   final restApi = RestAPI();
+  bool search = false;
 
   final textController = TextEditingController();
 
   @override
   void initState() {
     if (widget.menuNavigation == MenuNavigation.lines) {
-      widget.appBarTitle = 'Buscar Linhas';
+      appBarTitle = 'Buscar Linhas';
     } else {
-      widget.appBarTitle = 'Buscar Paradas';
+      appBarTitle = 'Buscar Paradas';
     }
+    search = false;
   }
 
-  void logarApi() async {
-    if (await restApi.login()) {
-      print("UsuÃ¡rio Logado com Sucesso!");
-    }
-    print(textController.text);
+  Future<void> pegarParadas() async {
+    lstParadas = await restApi.getStops(textController.text);
+    printBusStops(lstParadas, 10);
   }
 
-  void pegarParadas() async {
-    widget.lstParadas = await restApi.getStops(textController.text);
-    printBusStops(widget.lstParadas, 10);
+  Future<void> pegarLinhas() async {
+    lstLinhas = await restApi.getLines(textController.text);
+    printBusLines(lstLinhas, 10);
   }
 
-  void pegarLinhas() async {
-    widget.lstLinhas = await restApi.getLines(textController.text);
-    printBusLines(widget.lstLinhas,10);
-  }
-
-
-  void getAPI() async {
+  Future<void> getAPI() async {
     if (widget.menuNavigation == MenuNavigation.lines) {
-      pegarLinhas();
+      await pegarLinhas();
     } else {
-      pegarParadas();
+      await pegarParadas();
     }
+    search = true;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple,
+        backgroundColor: primaryColor,
         title: Text(
-          widget.appBarTitle,
+          appBarTitle,
           style: const TextStyle(fontSize: 25),
         ),
       ),
@@ -79,7 +71,7 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
         child: Container(
           height: const BoxConstraints().maxHeight,
           width: const BoxConstraints().maxWidth,
-          color: Colors.purple,
+          color: primaryColor,
           child: Column(
             children: [
               const SizedBox(
@@ -104,10 +96,9 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
               ),
               SizedBox(
                 child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      getAPI();
-                    });
+                  onPressed: () async {
+                    await getAPI();
+                    setState(() {});
                   },
                   style: ButtonStyle(
                       backgroundColor:
@@ -120,7 +111,7 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     child: Text(
                       "Buscar",
-                      style: TextStyle(color: Colors.purple, fontSize: 20),
+                      style: TextStyle(color: primaryColor, fontSize: 20),
                     ),
                   ),
                 ),
@@ -128,14 +119,26 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
               const SizedBox(
                 height: 20,
               ),
-              Observer(builder: (_) =>
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: ehPaginaDeLinha(widget.menuNavigation) ? widget.lstLinhas.length : widget.lstParadas.length,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return (ehPaginaDeLinha(widget.menuNavigation)) ? ListItemLines(widget.lstLinhas[index]) : ListItemStops(widget.lstParadas[index]);
-                },
-              ),
+              Expanded(
+                child: ((ehPaginaDeLinha(widget.menuNavigation)
+                                ? lstLinhas.length
+                                : lstParadas.length) !=
+                            0)
+                    ? ListView.builder(
+                        itemCount: ehPaginaDeLinha(widget.menuNavigation)
+                            ? lstLinhas.length
+                            : lstParadas.length,
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          return (ehPaginaDeLinha(widget.menuNavigation))
+                              ? ListItemLines(lstLinhas[index])
+                              : ListItemStops(lstParadas[index]);
+                        },
+                      )
+                    : (search == true) ? Text(
+                        "Não foi encontrado nenhum resultado!",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      )
+                    : Container()
               )
             ],
           ),
