@@ -1,5 +1,6 @@
 import 'package:app/data_objects/menu_enum.dart';
 import 'package:app/pages/base_search_page.dart';
+import 'package:app/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class MenuItemNav extends StatefulWidget {
@@ -33,7 +34,7 @@ class _MenuItemNavState extends State<MenuItemNav> {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 80),
           child: Text(
             widget.menuItemName,
-            style: const TextStyle(color: Colors.purple, fontSize: 20),
+            style: const TextStyle(color: primaryColor, fontSize: 20),
           ),
         ),
       ),

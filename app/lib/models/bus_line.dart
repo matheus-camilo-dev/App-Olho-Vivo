@@ -10,6 +10,6 @@ class BusLine{
   );
 
   factory BusLine.fromJson(dynamic data){
-    return BusLine(data['lt'] as String, data['tp'] as String, data['ts'] as String);
+    return BusLine("${data['lt'] as String}-${data['tl']}", data['tp'] as String, data['ts'] as String);
   }
 }

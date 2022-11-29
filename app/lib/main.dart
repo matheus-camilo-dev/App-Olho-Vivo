@@ -1,9 +1,6 @@
 import 'package:app/pages/home_page.dart';
-import 'package:app/services/rest_api.dart';
 import 'package:app/shared/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -32,19 +29,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final restApi = RestAPI();
-
-  void logarApi() async {
-    if (await restApi.login()) {
-      print("Usuário Logado com Sucesso!");
-      print(restApi.getLines('6010'));
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    logarApi();
   }
 
   @override
