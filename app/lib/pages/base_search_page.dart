@@ -1,10 +1,14 @@
+import 'package:app/components/list_item_lines.dart';
+import 'package:app/components/list_item_stops.dart';
 import 'package:app/data_objects/menu_enum.dart';
 import 'package:app/models/bus_line.dart';
 import 'package:app/models/bus_stop.dart';
 import 'package:app/services/rest_api.dart';
 import 'package:app/shared/utils/debbuger.dart';
+import 'package:app/shared/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 
 import '../shared/constants.dart';
 
@@ -23,6 +27,8 @@ class BaseSearchPage extends StatefulWidget {
 class _BaseSearchPageState extends State<BaseSearchPage> {
   final restApi = RestAPI();
 
+  final textController = TextEditingController();
+
   @override
   void initState() {
     if (widget.menuNavigation == MenuNavigation.lines) {
@@ -36,21 +42,19 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
     if (await restApi.login()) {
       print("UsuÃ¡rio Logado com Sucesso!");
     }
+    print(textController.text);
   }
 
   void pegarParadas() async {
-    widget.lstParadas = await restApi.getStops("Santo");
-    printBusStops(widget.lstParadas);
+    widget.lstParadas = await restApi.getStops(textController.text);
+    printBusStops(widget.lstParadas, 10);
   }
 
   void pegarLinhas() async {
-    widget.lstLinhas = await restApi.getLines("Amaro");
-    printBusLines(widget.lstLinhas);
+    widget.lstLinhas = await restApi.getLines(textController.text);
+    printBusLines(widget.lstLinhas,10);
   }
 
-  bool ehPaginaDeLinha(){
-    return widget.menuNavigation == MenuNavigation.lines;
-  }
 
   void getAPI() async {
     if (widget.menuNavigation == MenuNavigation.lines) {
@@ -63,7 +67,7 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Observer(builder: (_) => Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: Text(
@@ -84,12 +88,12 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
               SizedBox(
                 width: 350,
                 child: TextField(
-                  obscureText: true,
+                  controller: textController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50.0),
                     ),
-                    labelText: title,
+                    hintText: "Digite o numero do onibus",
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -124,28 +128,19 @@ class _BaseSearchPageState extends State<BaseSearchPage> {
               const SizedBox(
                 height: 20,
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: ehPaginaDeLinha() ? widget.lstLinhas.length : widget.lstParadas.length,
-                itemBuilder: (BuildContext ctxt, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      child: ListTile(
-                      title: Text(ehPaginaDeLinha() ? widget.lstLinhas[index].numeroOnibus : widget.lstParadas[index].nome),
-                      tileColor: Colors.white,
-                    ),
-                    ),
-                  );
-              },
-            ),
+              Observer(builder: (_) =>
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: ehPaginaDeLinha(widget.menuNavigation) ? widget.lstLinhas.length : widget.lstParadas.length,
+                  itemBuilder: (BuildContext ctxt, int index) {
+                    return (ehPaginaDeLinha(widget.menuNavigation)) ? ListItemLines(widget.lstLinhas[index]) : ListItemStops(widget.lstParadas[index]);
+                },
+              ),
+              )
             ],
           ),
         ),
       ),
-    ));
+    );
   }
 }
